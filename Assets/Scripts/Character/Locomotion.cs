@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Scripting.APIUpdating;
@@ -11,16 +12,24 @@ public class Locomotion : MonoBehaviour
     private CharacterController _characterController;
 
     public float Speed = 5.0f;
+    public float RunSpeed = 8.0f;
     public float AngularSensitivity = 50f;
     public float PanSensitivity = 30f;
-    public Vector2 m_Rotation;
+    public Vector2 m_Rotation = new Vector2(50f, 180f);
     public Camera MainCamera;
+    public LayerMask CollisionLayer;
     private float _cameraToCharacterDistance;
 
     private PlayerInput _inputAction;
     private Animator _playerAnimator;
     private float _moveXDuration = 0f;
+    [SerializeField]
     private float _moveYDuration = 0f;
+
+    public float JumpHeight = 1f;
+    private float _gravityValue = -9.81f;
+    private Vector3 _velocity = Vector3.zero;
+    
 
     private void Awake()
     {
@@ -30,6 +39,7 @@ public class Locomotion : MonoBehaviour
         if(MainCamera == null)
             MainCamera = Camera.main;
         _cameraToCharacterDistance = Vector3.Distance(transform.position, MainCamera.transform.position);
+        _inputAction.actions["Jump"].performed += ctx => Jump();
     }
 
     // Update is called once per frame
@@ -37,8 +47,12 @@ public class Locomotion : MonoBehaviour
     {
         if (_inputAction == null)
             return;
+        if (_characterController.isGrounded && _velocity.y < 0)
+            _velocity.y = 0f;
+        _velocity.y += _gravityValue * Time.deltaTime;
         Move(_inputAction.actions["Move"].ReadValue<Vector2>());
         Look(_inputAction.actions["Look"].ReadValue<Vector2>());
+        _characterController.Move(_velocity * Time.deltaTime);
     }
     private void Move(Vector2 dir)
     {
@@ -51,29 +65,27 @@ public class Locomotion : MonoBehaviour
         else
             _playerAnimator.SetBool("is Moving", true);
         _playerAnimator.SetFloat("Move X", dir.x);
+        float speed = Speed;
         if (dir.y < 0)
         {
             _playerAnimator.SetFloat("Move Y", -1f);
         }
-        else if(dir.y > 0)
+        else if (dir.y > 0)
         {
             _moveYDuration += Time.deltaTime;
-            if(_moveXDuration < 1f)
-                _playerAnimator.SetFloat("Move Y", 0.5f);
-            else if (_moveXDuration < 2f)
-                _playerAnimator.SetFloat("Move Y", 1f);
-            else
-                _playerAnimator.SetFloat("Move Y", 2f);
+            if (_moveYDuration > 2f)
+                speed = RunSpeed;
+
+            _playerAnimator.SetFloat("Move Y", Mathf.Clamp(_moveYDuration, 0f, 2f));    
         }
         else
         {
             _moveYDuration = 0;
         }
-        float scaledMoveSpeed = Speed * Time.deltaTime;
-        // For simplicity's sake, we just keep movement in a single plane here. Rotate
-        // direction according to world Y rotation of player.
+        float scaledMoveSpeed = speed * Time.deltaTime;
         Vector3 move = Quaternion.Euler(0, MainCamera.transform.eulerAngles.y, 0) * new Vector3(dir.x, 0, dir.y);
-        transform.position += move * scaledMoveSpeed;
+       
+        _characterController.Move(move * scaledMoveSpeed);
     }
     private void Look(Vector2 rotate)
     {
@@ -81,13 +93,27 @@ public class Locomotion : MonoBehaviour
             return;
         m_Rotation.x += rotate.y * PanSensitivity * Time.deltaTime;
         m_Rotation.y += rotate.x * AngularSensitivity * Time.deltaTime;
-        m_Rotation.x = Mathf.Clamp(m_Rotation.x, 25, 80);
-        m_Rotation.y = Mathf.Clamp(m_Rotation.y, 0, 360);
-        MainCamera.transform.position = transform.position + _cameraToCharacterDistance * (Quaternion.Euler(m_Rotation.x, 0f, 0f) * Vector3.up);
+        m_Rotation.x = Mathf.Clamp(m_Rotation.x, 25, 110);
+        //m_Rotation.y = Mathf.Clamp(m_Rotation.y, 0, 360);
+        RaycastHit hit;
+        float distance = _cameraToCharacterDistance;
+        if (Physics.Linecast(transform.position, transform.position + _cameraToCharacterDistance * (Quaternion.Euler(m_Rotation.x, 0f, 0f) * Vector3.up), out hit, CollisionLayer))
+            distance = Mathf.Min(distance, hit.distance);
+        
+        MainCamera.transform.position = transform.position + distance * (Quaternion.Euler(m_Rotation.x, 0f, 0f) * Vector3.up);
         MainCamera.transform.RotateAround(transform.position, Vector3.up, m_Rotation.y);
         MainCamera.transform.LookAt(transform.position + new Vector3(0, 1f, 0f));
 
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
         transform.localEulerAngles = new Vector3(0f, m_Rotation.y + 180, 0f);
+    }
+
+    private void Jump()
+    {
+        RaycastHit hit;
+        if (!Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f))
+            return;
+        _velocity.y += Mathf.Sqrt(JumpHeight * -3.0f * _gravityValue);
+        _playerAnimator.SetTrigger("Jump");
     }
 }
