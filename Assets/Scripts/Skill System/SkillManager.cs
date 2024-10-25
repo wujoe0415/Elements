@@ -16,6 +16,7 @@ public class SkillManager : MonoBehaviour
     public PlayerInput InputAction;
     public SkinnedMeshRenderer Cape;
     public MeshRenderer Stick;
+    public Animator PlayerAnimator;
     
     private Material _capeMaterial;
     private Material _stickMaterial;
@@ -28,7 +29,9 @@ public class SkillManager : MonoBehaviour
     }
     private void ActivateSkill()
     {
+        PlayerAnimator.SetTrigger("Use Skill");
         Skills[_currentSkillIndex].Skill.Activate();
+        PlayerAnimator.SetInteger("Skill Attack", _currentSkillIndex);
         _capeMaterial.SetColor("Color_c18aea2e3ad54319abb53f299507b005", Skills[_currentSkillIndex].Color);
         _stickMaterial.SetColor("_BaseColor", Skills[_currentSkillIndex].Color);
         _currentSkillIndex = (_currentSkillIndex + 1) % Skills.Count;

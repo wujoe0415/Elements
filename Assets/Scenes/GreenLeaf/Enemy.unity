@@ -779,6 +779,7 @@ MonoBehaviour:
   InputAction: {fileID: 136275809887645815}
   Cape: {fileID: 137047875980854283}
   Stick: {fileID: 23345256385012787}
+  PlayerAnimator: {fileID: 95805637567328811}
 --- !u!1 &1978534921
 GameObject:
   m_ObjectHideFlags: 0
