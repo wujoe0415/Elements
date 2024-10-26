@@ -99,13 +99,23 @@ public class Locomotion : MonoBehaviour
         float distance = _cameraToCharacterDistance;
         if (Physics.Linecast(transform.position, transform.position + _cameraToCharacterDistance * (Quaternion.Euler(m_Rotation.x, 0f, 0f) * Vector3.up), out hit, CollisionLayer))
             distance = Mathf.Min(distance, hit.distance);
-        
+
         MainCamera.transform.position = transform.position + distance * (Quaternion.Euler(m_Rotation.x, 0f, 0f) * Vector3.up);
         MainCamera.transform.RotateAround(transform.position, Vector3.up, m_Rotation.y);
         MainCamera.transform.LookAt(transform.position + new Vector3(0, 1f, 0f));
 
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
         transform.localEulerAngles = new Vector3(0f, m_Rotation.y + 180, 0f);
+
+        bool isTurnRight = rotate.x > 0;
+        //Debug.Log(rotate.x * AngularSensitivity * Time.deltaTime);
+        if (Mathf.Abs(rotate.x) * AngularSensitivity * Time.deltaTime > 1.85f)
+            _playerAnimator.SetTrigger(isTurnRight ? "Turn Right" : "Turn Left");
+        // Clamp Rotatio y
+        if (m_Rotation.y < 0)
+            m_Rotation.y = 360 + m_Rotation.y;
+        else if (m_Rotation.y > 360)
+            m_Rotation.y = m_Rotation.y - 360;
     }
 
     private void Jump()
