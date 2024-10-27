@@ -41,8 +41,23 @@ public class SkillManager : MonoBehaviour
         else if(InputAction.actions["Skill Map"].WasReleasedThisFrame())
             ClearSkillParameter();
     }
+    private string[] _cursableState = new string[] { "Idle", "Turn Left", "Turn Right"};
     public void Pending()
     {
+        bool isCursable = false;
+        foreach(string state in _cursableState)
+        {
+            if(PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName(state))
+            {
+                isCursable = true;
+                break;
+            }
+        }
+        if (!isCursable)
+        {
+            ClearSkillParameter();
+            return;
+        }
         _currentTime += Time.deltaTime;
         MagicRing.SetActive(true);
         if (_currentTime > Threshold)
@@ -54,11 +69,11 @@ public class SkillManager : MonoBehaviour
     {
         MagicFog.SetActive(true);
         _currentTime = 0f;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
+        _currentSkillIndex = (_currentSkillIndex + 1) % Skills.Count;
         _capeMaterial.SetColor("Color_c18aea2e3ad54319abb53f299507b005", Skills[_currentSkillIndex].Color);
         _stickMaterial.SetColor("_BaseColor", Skills[_currentSkillIndex].Color);
-        _currentSkillIndex = (_currentSkillIndex + 1) % Skills.Count;
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(2f);
         MagicFog.SetActive(false);
     }
     public void ActivateSkill()

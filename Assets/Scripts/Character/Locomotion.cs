@@ -30,7 +30,6 @@ public class Locomotion : MonoBehaviour
     private float _gravityValue = -9.81f;
     private Vector3 _velocity = Vector3.zero;
     
-
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
@@ -53,6 +52,9 @@ public class Locomotion : MonoBehaviour
         Move(_inputAction.actions["Move"].ReadValue<Vector2>());
         Look(_inputAction.actions["Look"].ReadValue<Vector2>());
         _characterController.Move(_velocity * Time.deltaTime);
+
+        if (Input.GetKeyDown(KeyCode.K))
+            _playerAnimator.SetTrigger("Turn Right");
     }
     private void Move(Vector2 dir)
     {
@@ -109,15 +111,25 @@ public class Locomotion : MonoBehaviour
 
         bool isTurnRight = rotate.x > 0;
         //Debug.Log(rotate.x * AngularSensitivity * Time.deltaTime);
-        if (Mathf.Abs(rotate.x) * AngularSensitivity * Time.deltaTime > 1.85f)
-            _playerAnimator.SetTrigger(isTurnRight ? "Turn Right" : "Turn Left");
-        // Clamp Rotatio y
+        if (Mathf.Abs(rotate.x) * AngularSensitivity * Time.deltaTime > 2.2f)
+        {
+            _playerAnimator.SetBool(isTurnRight ? "Turn Right" : "Turn Left", true);
+            _playerAnimator.SetBool(!isTurnRight ? "Turn Right" : "Turn Left", false);
+        }
+        else
+        {
+            _playerAnimator.SetBool("Turn Right", false);
+            _playerAnimator.SetBool("Turn Left", false);
+        }
+        
+        
+        // Clamp Rotation y
         if (m_Rotation.y < 0)
             m_Rotation.y = 360 + m_Rotation.y;
         else if (m_Rotation.y > 360)
             m_Rotation.y = m_Rotation.y - 360;
     }
-
+    
     private void Jump()
     {
         RaycastHit hit;

@@ -5783,7 +5783,7 @@ MonoBehaviour:
   PlayerAnimator: {fileID: 95805637567328811}
   MagicRing: {fileID: 643987198}
   MagicFog: {fileID: 621437881}
-  Threshold: 2
+  Threshold: 3.5
 --- !u!1 &1978534921
 GameObject:
   m_ObjectHideFlags: 0
