@@ -138,7 +138,6 @@ public class Locomotion : MonoBehaviour
         _velocity.y += Mathf.Sqrt(JumpHeight * -3.0f * _gravityValue);
         _playerAnimator.SetTrigger("Jump");
     }
-
     public bool isIdle
     {
         get { return _playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"); }
