@@ -29,13 +29,13 @@ public class Locomotion : MonoBehaviour
     public float JumpHeight = 1f;
     private float _gravityValue = -9.81f;
     private Vector3 _velocity = Vector3.zero;
-    
+
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _inputAction = GetComponent<PlayerInput>();
         _playerAnimator = GetComponent<Animator>();
-        if(MainCamera == null)
+        if (MainCamera == null)
             MainCamera = Camera.main;
         _cameraToCharacterDistance = Vector3.Distance(transform.position, MainCamera.transform.position);
         _inputAction.actions["Jump"].performed += ctx => Jump();
@@ -78,7 +78,7 @@ public class Locomotion : MonoBehaviour
             if (_moveYDuration > 2f)
                 speed = RunSpeed;
 
-            _playerAnimator.SetFloat("Move Y", Mathf.Clamp(_moveYDuration, 0f, 2f));    
+            _playerAnimator.SetFloat("Move Y", Mathf.Clamp(_moveYDuration, 0f, 2f));
         }
         else
         {
@@ -86,7 +86,7 @@ public class Locomotion : MonoBehaviour
         }
         float scaledMoveSpeed = speed * Time.deltaTime;
         Vector3 move = Quaternion.Euler(0, MainCamera.transform.eulerAngles.y, 0) * new Vector3(dir.x, 0, dir.y);
-       
+
         _characterController.Move(move * scaledMoveSpeed);
     }
     private void Look(Vector2 rotate)
@@ -121,15 +121,15 @@ public class Locomotion : MonoBehaviour
             _playerAnimator.SetBool("Turn Right", false);
             _playerAnimator.SetBool("Turn Left", false);
         }
-        
-        
+
+
         // Clamp Rotation y
         if (m_Rotation.y < 0)
             m_Rotation.y = 360 + m_Rotation.y;
         else if (m_Rotation.y > 360)
             m_Rotation.y = m_Rotation.y - 360;
     }
-    
+
     private void Jump()
     {
         RaycastHit hit;
@@ -137,5 +137,17 @@ public class Locomotion : MonoBehaviour
             return;
         _velocity.y += Mathf.Sqrt(JumpHeight * -3.0f * _gravityValue);
         _playerAnimator.SetTrigger("Jump");
+    }
+
+    public bool isIdle
+    {
+        get { return _playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"); }
+    }
+    public bool isRun
+    {
+        get
+        {
+            return _moveYDuration > 2f;
+        }
     }
 }
