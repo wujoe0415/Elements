@@ -9,7 +9,12 @@ public class Floor : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
-            WalkSoundManager.Instance.ChangeFloor(type);
+            WalkSoundManager.Instance?.ChangeFloor(type);
             
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Player")
+            WalkSoundManager.Instance?.ChangeFloor(FloorType.Default);
     }
 }

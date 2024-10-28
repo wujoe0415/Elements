@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum FloorType { 
+public enum FloorType
+{
+    Default,
     Brick,
     Forest,
-    Water,
-    None
+    Water
 }
 
+[System.Serializable]
 public class FloorSound
 {
     public FloorType Floor;
@@ -30,20 +32,22 @@ public class WalkSoundManager : MonoBehaviour
     {
         get
         {
-            return Instance;
+            return _instance;
         }
-        set { Instance = value; }
+        set { _instance = value; }
     }
+    private static WalkSoundManager _instance = null;
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
         _audioSource = GetComponent<AudioSource>();
         _audioSource.Pause();
+        ChangeFloor(FloorType.Default);
     }
     public FloorType GetState()
     {
-        return FloorType.None;
+        return _currentfloor.Floor;
     }
     public void ChangeFloor(FloorType floor)
     {
