@@ -7,7 +7,6 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     public Portal Exit;
-    private IEnumerator _coroutine;
     public GameObject MagicRing;
     private AudioSource _successPort;
 
@@ -23,20 +22,20 @@ public class Portal : MonoBehaviour
     }
     public void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player" && _coroutine != null && !isPorted)
+        if (other.tag == "Player" && !isPorted)
         {
-            StopCoroutine(_coroutine);
+            Debug.Log("None");
+            StopAllCoroutines();
+            Debug.Log("After Stop");
             MagicRing.SetActive(false);
             Exit.MagicRing.SetActive(false);
-            _successPort.Stop();
-            Exit._successPort.Stop();
-            _coroutine = null;
+            _successPort.Pause();
+            Exit._successPort.Pause();
             isPorted = false;
         }
     }
     public void Transport(GameObject obj)
     {
-        _coroutine = Port(obj);
         StartCoroutine(Port(obj));
     }
     public IEnumerator Port(GameObject obj)
@@ -45,9 +44,9 @@ public class Portal : MonoBehaviour
         MagicRing.SetActive(true);
         Exit.MagicRing.SetActive(true);
         yield return new WaitForSeconds(1f);
-        Debug.Log(obj);
-        Debug.Log(obj.transform.position + " " + Exit.transform.position);
-        obj.GetComponent<CharacterController>().transform.position = Exit.transform.position;
+        obj.GetComponent<CharacterController>().enabled = false;
+        obj.transform.position = new Vector3(Exit.transform.position.x, obj.transform.position.y, Exit.transform.position.z);
+        obj.GetComponent<CharacterController>().enabled = true;
         isPorted = true;
         _successPort.Play();
         Exit._successPort.Play();
@@ -55,11 +54,10 @@ public class Portal : MonoBehaviour
         yield return new WaitForSeconds(2f);
         MagicRing.SetActive(false);
         Exit.MagicRing.SetActive(false);
-        _coroutine = null;
         isPorted = false;
     }
     public bool isPortable
     {
-        get { return Exit._coroutine == null; }
+        get { return !Exit.isPorted; }
     }
 }

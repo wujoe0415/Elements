@@ -52,7 +52,6 @@ public class Locomotion : MonoBehaviour
         Move(_inputAction.actions["Move"].ReadValue<Vector2>());
         Look(_inputAction.actions["Look"].ReadValue<Vector2>());
         _characterController.Move(_velocity * Time.deltaTime);
-
         if (Input.GetKeyDown(KeyCode.K))
             _playerAnimator.SetTrigger("Turn Right");
     }
