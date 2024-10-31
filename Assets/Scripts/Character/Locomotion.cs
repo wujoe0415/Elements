@@ -132,11 +132,18 @@ public class Locomotion : MonoBehaviour
 
     private void Jump()
     {
-        RaycastHit hit;
-        if (!Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f))
+        if (!isGrounded())
             return;
         _velocity.y += Mathf.Sqrt(JumpHeight * -3.0f * _gravityValue);
         _playerAnimator.SetTrigger("Jump");
+    }
+    public bool isGrounded()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f))
+            return true;
+        else
+            return false;
     }
     public bool isIdle
     {

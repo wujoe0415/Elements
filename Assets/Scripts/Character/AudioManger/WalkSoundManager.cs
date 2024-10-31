@@ -62,10 +62,10 @@ public class WalkSoundManager : MonoBehaviour
     }
     public void Update()
     {
-        if (PlayerLocomotion.isIdle)
+        if (PlayerLocomotion.isIdle || !PlayerLocomotion.isGrounded())
         {
             _audioSource.Pause();
-            _audioSource.clip = null;
+            //_audioSource.clip = null;
             return;
         }
         if (_audioSource.clip != _currentfloor.Run && PlayerLocomotion.isRun)
