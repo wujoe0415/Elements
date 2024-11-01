@@ -4,5 +4,16 @@ using UnityEngine;
 
 public class Aqua : Skill
 {
-    
+    public Transform Anchor;
+    public GameObject Rain;
+    public override void Activate()
+    {
+        Debug.Log("Aqua");
+       Instantiate(Rain, Anchor.position, Quaternion.identity);
+    }
+    public override void Deactivate()
+    {
+        Debug.Log("Skill deactivated");
+        
+    }
 }
