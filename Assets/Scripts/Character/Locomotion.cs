@@ -139,7 +139,7 @@ public class Locomotion : MonoBehaviour
     public bool isGrounded()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f, CollisionLayer))
             return true;
         else
             return false;

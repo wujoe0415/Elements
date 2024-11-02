@@ -19,8 +19,11 @@ public class Rain : MonoBehaviour
     private IEnumerator Raining()
     {
         // ¬Iªk
-        yield return new WaitForSeconds(0.8f);
-
+        yield return new WaitForSeconds(1f);
+        for(int i = 0;i<transform.childCount;i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
         float fadeDuration = 1f;
         _audio.volume = 0;
         _audio.Play();
