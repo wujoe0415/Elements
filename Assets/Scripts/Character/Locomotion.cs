@@ -14,11 +14,9 @@ public class Locomotion : MonoBehaviour
     public float Speed = 5.0f;
     public float RunSpeed = 8.0f;
     public float AngularSensitivity = 50f;
-    public float PanSensitivity = 30f;
-    public Vector2 m_Rotation = new Vector2(50f, 180f);
-    public Camera MainCamera;
-    public LayerMask CollisionLayer;
-    private float _cameraToCharacterDistance;
+    public float JumpHeight = 1f;
+    private float _gravityValue = -9.81f;
+    private Vector3 _velocity = Vector3.zero;
 
     private PlayerInput _inputAction;
     private Animator _playerAnimator;
@@ -26,9 +24,15 @@ public class Locomotion : MonoBehaviour
     [SerializeField]
     private float _moveYDuration = 0f;
 
-    public float JumpHeight = 1f;
-    private float _gravityValue = -9.81f;
-    private Vector3 _velocity = Vector3.zero;
+    [Header("Player Camera")]
+    public float PanSensitivity = 30f;
+    public Vector2 m_Rotation = new Vector2(50f, 180f);
+    public Camera MainCamera;
+    public Transform TargetPosition;
+    public LayerMask CollisionLayer;
+    private float _cameraToCharacterDistance;
+
+
 
     private void Awake()
     {
@@ -103,7 +107,7 @@ public class Locomotion : MonoBehaviour
 
         MainCamera.transform.position = transform.position + distance * (Quaternion.Euler(m_Rotation.x, 0f, 0f) * Vector3.up);
         MainCamera.transform.RotateAround(transform.position, Vector3.up, m_Rotation.y);
-        MainCamera.transform.LookAt(transform.position + new Vector3(0, 1f, 0f));
+        MainCamera.transform.LookAt(TargetPosition.position + new Vector3(0, 1f, 0f));
 
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
         transform.localEulerAngles = new Vector3(0f, m_Rotation.y + 180, 0f);

@@ -42,6 +42,6 @@ public class Rain : MonoBehaviour
             yield return null;
         }
         _audio.volume = 0;
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }
