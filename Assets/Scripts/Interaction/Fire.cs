@@ -16,8 +16,6 @@ public class Fire : MonoBehaviour
     public void OnParticleCollision(GameObject other)
     {
         int numCollisionEvents = _fireBall.GetCollisionEvents(other, ParticleCollisionEvent);
-        Debug.Log("Collision");
-        Debug.Log(numCollisionEvents);
         int i = 0;
         while (i < numCollisionEvents)
         {

@@ -30,9 +30,8 @@ public class Locomotion : MonoBehaviour
     public Camera MainCamera;
     public Transform TargetPosition;
     public LayerMask CollisionLayer;
+    public LayerMask IgnoreLayer;
     private float _cameraToCharacterDistance;
-
-
 
     private void Awake()
     {
@@ -143,7 +142,7 @@ public class Locomotion : MonoBehaviour
     public bool isGrounded()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f, CollisionLayer))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f, ~IgnoreLayer/*CollisionLayer*/))
             return true;
         else
             return false;
