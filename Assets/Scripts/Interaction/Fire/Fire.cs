@@ -20,8 +20,10 @@ public class Fire : MonoBehaviour
         while (i < numCollisionEvents)
         {
             Vector3 pos = ParticleCollisionEvent[i].intersection;
-            Instantiate(Fires[Random.Range(0, Fires.Length)], pos, Quaternion.identity);
+            GameObject fire = Instantiate(Fires[Random.Range(0, Fires.Length)], pos, Quaternion.identity);
             i++;
+            if(other.GetComponent<Burnable>() != null)
+                other.GetComponent<Burnable>().SetFire(fire);
         }
     }
 

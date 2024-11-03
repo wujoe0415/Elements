@@ -24,9 +24,7 @@ public class Portal : MonoBehaviour
     {
         if (other.tag == "Player" && !isPorted)
         {
-            Debug.Log("None");
             StopAllCoroutines();
-            Debug.Log("After Stop");
             MagicRing.SetActive(false);
             Exit.MagicRing.SetActive(false);
             _successPort.Pause();

@@ -9,6 +9,9 @@ using UnityEngine.InputSystem;
 public class SkillPackage {
     public Skill Skill;
     public Color Color;
+
+    public string Hint;
+    public Color HintColor = Color.white;
 }
 public class SkillManager : MonoBehaviour
 {

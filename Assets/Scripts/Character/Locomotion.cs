@@ -14,7 +14,7 @@ public class Locomotion : MonoBehaviour
     public float Speed = 5.0f;
     public float RunSpeed = 8.0f;
     public float AngularSensitivity = 50f;
-    public float JumpHeight = 1f;
+    public float JumpHeight = 3f;
     private float _gravityValue = -9.81f;
     private Vector3 _velocity = Vector3.zero;
 
@@ -131,12 +131,11 @@ public class Locomotion : MonoBehaviour
         else if (m_Rotation.y > 360)
             m_Rotation.y = m_Rotation.y - 360;
     }
-
     private void Jump()
     {
         if (!isGrounded())
             return;
-        _velocity.y += Mathf.Sqrt(JumpHeight * -3.0f * _gravityValue);
+        _velocity.y += Mathf.Sqrt(JumpHeight * -1.0f * _gravityValue);
         _playerAnimator.SetTrigger("Jump");
     }
     public bool isGrounded()
@@ -157,5 +156,10 @@ public class Locomotion : MonoBehaviour
         {
             return _moveYDuration > 2f;
         }
+    }
+    public void Fly(float height)
+    {
+        _velocity.y += Mathf.Sqrt(height * -1.0f * _gravityValue);
+        _playerAnimator.SetTrigger("Jump");
     }
 }

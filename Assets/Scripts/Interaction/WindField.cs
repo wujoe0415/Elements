@@ -18,15 +18,21 @@ public class WindField : MonoBehaviour
     }
     public void OnTriggerStay(Collider other)
     {
+        
         if (other.GetComponent<Rigidbody>() == null)
             return;
-        
         other.GetComponent<Rigidbody>().AddForce(Vector3.up * WindForce);
     }
     public void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<Locomotion>().Fly(WindForce);
+            return;
+        }
         if (other.GetComponent<Rigidbody>() == null)
             return;
+        
         Vector3 windDir = new Vector3(Random.Range(-1f, 1f), Random.Range(1f, 3f), Random.Range(-1f, 1f));
         other.GetComponent<Rigidbody>().AddForce(windDir * WindForce);
     }
