@@ -7647,6 +7647,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PolarType: 1
   MagnetForce: 35
+--- !u!1 &1422188940 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8804994112328321350, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+  m_PrefabInstance: {fileID: 1785484137}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1422188945
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1422188940}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3682952, y: 0.4826907, z: 0.40141726}
+  m_Center: {x: 0, y: 0.15843832, z: 0}
 --- !u!1001 &1439166974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8244,6 +8270,74 @@ Transform:
   - {fileID: 1978534924}
   m_Father: {fileID: 4063551503178985}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1785484137
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 553357280116048206, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5011717183631500727, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250602631433068676, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: BurnTime
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 8804994112328321350, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      propertyPath: m_Name
+      value: FX_Fire_01
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8804994112328321350, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1422188945}
+  m_SourcePrefab: {fileID: 100100000, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
 --- !u!1 &1794504096
 GameObject:
   m_ObjectHideFlags: 0
@@ -11955,3 +12049,4 @@ SceneRoots:
   - {fileID: 2011991133}
   - {fileID: 1003504433}
   - {fileID: 1615524510}
+  - {fileID: 1785484137}
