@@ -8,7 +8,6 @@ using UnityEngine;
 public class FadeText : MonoBehaviour
 {
     public float Duration = 1.0f;
-    public Color TargetColor = Color.white;
     private TextMeshProUGUI _text;
 
     private void Awake()
@@ -17,17 +16,14 @@ public class FadeText : MonoBehaviour
         _text.color = new Color(_text.color.r, _text.color.g, _text.color.b, 0);
         StartCoroutine(FadeTextUI());
     }
-    public void SetTargetColor(Color color)
-    {
-        TargetColor = color;
-    }
     private IEnumerator FadeTextUI()
     {
         float fadeDuration = Duration / 2;
-        Color color = _text.color;
-        for(float t = 0.01f; t < fadeDuration; t += Time.deltaTime)
+        Color _initColor = new Color(_text.color.r, _text.color.g, _text.color.b, 0f);
+        Color _targertColor = new Color(_text.color.r, _text.color.g, _text.color.b, 1f);
+        for (float t = 0.01f; t < fadeDuration; t += Time.deltaTime)
         {
-            _text.color = Color.Lerp(color, TargetColor, Mathf.Min(1, t / fadeDuration));
+            _text.color = Color.Lerp(_initColor, _targertColor, Mathf.Min(1, t / fadeDuration));
             yield return null;
         }
         // Stay 3 frames
@@ -36,7 +32,7 @@ public class FadeText : MonoBehaviour
         yield return null;
         for(float t = 0.01f; t < fadeDuration; t += Time.deltaTime)
         {
-            _text.color = Color.Lerp(TargetColor, color, Mathf.Min(1, t / fadeDuration));
+            _text.color = Color.Lerp(_targertColor, _initColor, Mathf.Min(1, t / fadeDuration));
             yield return null;
         }
         Destroy(gameObject);

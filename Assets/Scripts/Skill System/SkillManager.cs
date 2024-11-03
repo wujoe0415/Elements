@@ -31,6 +31,7 @@ public class SkillManager : MonoBehaviour
     private Material _capeMaterial;
     private Material _stickMaterial;
 
+
     private void Awake()
     {
         InputAction.actions["Interact"].performed += ctx => ActivateSkill();
@@ -81,6 +82,7 @@ public class SkillManager : MonoBehaviour
     }
     public void ActivateSkill()
     {
+        HintManager.Instance.ShowHint(Skills[_currentSkillIndex].Hint, Skills[_currentSkillIndex].HintColor);
         PlayerAnimator.SetTrigger("Use Skill");
         Skills[_currentSkillIndex].Skill.Activate();
         PlayerAnimator.SetInteger("Skill Attack", _currentSkillIndex);

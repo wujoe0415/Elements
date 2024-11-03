@@ -3,32 +3,28 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-[System.Serializable]
-public class SkillHintWord
-{
-    public Skill Skill;
-    public string Word;
-    public Color WordColor = Color.white;
-}
 
 public class HintManager : MonoBehaviour
 {
+    public RectTransform HintAnchor;
     public GameObject ScreenWord;
-    public List<SkillHintWord> HintWords = new List<SkillHintWord>();
     public Rect TextRect;
-    public void ShowSkillHint(Skill skill)
+    public static HintManager Instance;
+
+    private void Awake()
     {
-        foreach (SkillHintWord word in HintWords) {
-            if (word.Skill == skill) {
-                ShowHint(word.Word);
-                return;
-            }
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
         }
+        Instance = this;
     }
-    public void ShowHint(string hint)
+    public void ShowHint(string hint, Color hintColor)
     {
-        Vector2 pos = new Vector2(TextRect.x + Random.Range(-TextRect.width/2, TextRect.width / 2), TextRect.y+ Random.Range(-TextRect.height / 2, TextRect.height / 2));
-        GameObject newWord = Instantiate(ScreenWord, pos, Quaternion.identity);
+        GameObject newWord = Instantiate(ScreenWord, HintAnchor.transform.position, Quaternion.identity, HintAnchor.transform);
         newWord.GetComponent<TextMeshProUGUI>().text = hint;
+        newWord.GetComponent<TextMeshProUGUI>().color = hintColor;
+        newWord.AddComponent<FadeText>();
     }
 }
