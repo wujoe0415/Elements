@@ -6,10 +6,11 @@ public class Flame : Skill
 {
     public GameObject Fire;
     public Transform StartPosition;
-
+    public Transform TargetPosition;
     public override void Activate()
     {
-        Instantiate(Fire, StartPosition.position, transform.rotation);
+        Quaternion rot = Quaternion.LookRotation(TargetPosition.position - StartPosition.position);
+        Instantiate(Fire, StartPosition.position, rot);
     }
     public override void Deactivate() {
         Debug.Log("Skill deactivated");

@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Burn : MonoBehaviour
 {
-    public float BurnTime = 3f;
+    private float _burnTime = 3f;
 
     private void Awake()
     {
-        BurnTime = Random.Range(20f, 50f);
+        _burnTime = Random.Range(3f, 5f);
         StartCoroutine(Burning());
     }
     public void OnParticleCollision(GameObject other)
@@ -24,8 +24,7 @@ public class Burn : MonoBehaviour
     }
     private IEnumerator Burning()
     {
-       yield return new WaitForSeconds(BurnTime);
-        Debug.Log("Burned");
+       yield return new WaitForSeconds(_burnTime);
        Destroy(gameObject);
     }
 }

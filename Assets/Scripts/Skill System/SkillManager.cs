@@ -12,6 +12,7 @@ public class SkillPackage {
 
     public string Hint;
     public Color HintColor = Color.white;
+    public float Delay = 0.5f;
 }
 public class SkillManager : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class SkillManager : MonoBehaviour
         else if(InputAction.actions["Skill Map"].WasReleasedThisFrame())
             ClearSkillParameter();
     }
-    private string[] _cursableState = new string[] { "Idle", "Turn Left", "Turn Right"};
+    private string[] _cursableState = new string[] { "Idle", "Turn Left", "Turn Right", "VictoryStart", "VictoryMaintain" };
     public void Pending()
     {
         bool isCursable = false;
@@ -64,6 +65,7 @@ public class SkillManager : MonoBehaviour
         }
         _currentTime += Time.deltaTime;
         MagicRing.SetActive(true);
+        PlayerAnimator.SetBool("Casting", true);
         if (_currentTime > Threshold)
             StartCoroutine(ChangeSkill());
         if (_fadeCoroutine != null)
@@ -80,19 +82,38 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         MagicFog.SetActive(false);
     }
+    private string[] _useSkillState = new string[] { "Idle", "Turn Left", "Turn Right"};
     public void ActivateSkill()
     {
-        HintManager.Instance.ShowHint(Skills[_currentSkillIndex].Hint, Skills[_currentSkillIndex].HintColor);
+        bool isCursable = false;
+        foreach (string state in _useSkillState)
+        {
+            if (PlayerAnimator.GetCurrentAnimatorStateInfo(0).IsName(state))
+            {
+                isCursable = true;
+                break;
+            }
+        }
+        if (!isCursable)
+            return;
         PlayerAnimator.SetTrigger("Use Skill");
-        Skills[_currentSkillIndex].Skill.Activate();
         PlayerAnimator.SetInteger("Skill Attack", _currentSkillIndex);
-        ClearSkillParameter();
+        
+        IEnumerator coroutine = UseSkill(_currentSkillIndex);
+        StartCoroutine(coroutine);
+    }
+    public IEnumerator UseSkill(int index)
+    {
+        yield return new WaitForSeconds(Skills[index].Delay);
+        HintManager.Instance.ShowHint(Skills[_currentSkillIndex].Hint, Skills[_currentSkillIndex].HintColor);
+        Skills[index].Skill.Activate();
     }
     public void ClearSkillParameter()
     {
         _currentTime = 0f;
         _fadeCoroutine = FadeOutEffect();
         StartCoroutine(_fadeCoroutine);
+        PlayerAnimator.SetBool("Casting", false);
     }
     public IEnumerator FadeOutEffect()
     {
@@ -106,6 +127,7 @@ public class SkillManager : MonoBehaviour
     {
         _capeMaterial.SetColor("Color_c18aea2e3ad54319abb53f299507b005", Skills[0].Color);
         _stickMaterial.SetColor("_BaseColor", Skills[0].Color);
+        StopAllCoroutines();
     }
 }
 

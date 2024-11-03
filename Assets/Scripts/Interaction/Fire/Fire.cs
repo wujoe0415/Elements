@@ -7,6 +7,7 @@ public class Fire : MonoBehaviour
     public GameObject[] Fires = new GameObject[3];
     private ParticleSystem _fireBall;
     public List<ParticleCollisionEvent> ParticleCollisionEvent = new List<ParticleCollisionEvent>();
+    public LayerMask WaterLayer;
 
     public void OnEnable()
     {
@@ -19,6 +20,11 @@ public class Fire : MonoBehaviour
         int i = 0;
         while (i < numCollisionEvents)
         {
+            if (other.layer == 4)
+            {
+                Destroy(gameObject);
+                return;
+            }
             Vector3 pos = ParticleCollisionEvent[i].intersection;
             GameObject fire = Instantiate(Fires[Random.Range(0, Fires.Length)], pos, Quaternion.identity);
             i++;

@@ -109,3 +109,6 @@ MonoBehaviour:
   - {fileID: 8804994112328321350, guid: 5be14e4fcd1abc44883c3067d2db1517, type: 3}
   - {fileID: 1701590728580777898, guid: 314f604681cc6cd45bc3bfd95f4d8e33, type: 3}
   - {fileID: 1762191311236684377, guid: 39a7bf6c806666149b835a310dc45940, type: 3}
+  WaterLayer:
+    serializedVersion: 2
+    m_Bits: 16

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,6 @@ public class Locomotion : MonoBehaviour
 
     public float Speed = 5.0f;
     public float RunSpeed = 8.0f;
-    public float AngularSensitivity = 50f;
     public float JumpHeight = 3f;
     private float _gravityValue = -9.81f;
     private Vector3 _velocity = Vector3.zero;
@@ -25,7 +25,8 @@ public class Locomotion : MonoBehaviour
     private float _moveYDuration = 0f;
 
     [Header("Player Camera")]
-    public float PanSensitivity = 30f;
+    public float PanSensitivity = 50f;
+    public float TiltSensitivity = 30f;
     public Vector2 m_Rotation = new Vector2(50f, 180f);
     public Camera MainCamera;
     public Transform TargetPosition;
@@ -49,14 +50,16 @@ public class Locomotion : MonoBehaviour
     {
         if (_inputAction == null)
             return;
-        if (_characterController.isGrounded && _velocity.y < 0)
-            _velocity.y = 0f;
         _velocity.y += _gravityValue * Time.deltaTime;
+        if (_characterController.isGrounded && _velocity.y < 0) // On Ground
+            _velocity.y = 0f;
+        else if (isGrounded(1.2f) && _velocity.y < 0) // Near Ground
+            _playerAnimator.SetInteger("JumpStatus", 0);
+        else if (_velocity.y < 0) // Falling
+            _playerAnimator.SetInteger("JumpStatus", 2);
         Move(_inputAction.actions["Move"].ReadValue<Vector2>());
         Look(_inputAction.actions["Look"].ReadValue<Vector2>());
         _characterController.Move(_velocity * Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.K))
-            _playerAnimator.SetTrigger("Turn Right");
     }
     private void Move(Vector2 dir)
     {
@@ -74,7 +77,7 @@ public class Locomotion : MonoBehaviour
         {
             _playerAnimator.SetFloat("Move Y", -1f);
         }
-        else if (dir.y > 0)
+        else if (dir.y > 0 && _characterController.isGrounded)
         {
             _moveYDuration += Time.deltaTime;
             if (_moveYDuration > 2f)
@@ -95,9 +98,9 @@ public class Locomotion : MonoBehaviour
     {
         if (rotate.sqrMagnitude < 0.01)
             return;
-        m_Rotation.x += rotate.y * PanSensitivity * Time.deltaTime;
-        m_Rotation.y += rotate.x * AngularSensitivity * Time.deltaTime;
-        m_Rotation.x = Mathf.Clamp(m_Rotation.x, 25, 110);
+        m_Rotation.x += rotate.y * TiltSensitivity * Time.deltaTime;
+        m_Rotation.y += rotate.x * PanSensitivity * Time.deltaTime;
+        m_Rotation.x = Mathf.Clamp(m_Rotation.x, 25, 85);
         //m_Rotation.y = Mathf.Clamp(m_Rotation.y, 0, 360);
         RaycastHit hit;
         float distance = _cameraToCharacterDistance;
@@ -113,7 +116,7 @@ public class Locomotion : MonoBehaviour
 
         bool isTurnRight = rotate.x > 0;
         //Debug.Log(rotate.x * AngularSensitivity * Time.deltaTime);
-        if (Mathf.Abs(rotate.x) * AngularSensitivity * Time.deltaTime > 2.2f)
+        if (Mathf.Abs(rotate.x) * PanSensitivity * Time.deltaTime > 2.2f)
         {
             _playerAnimator.SetBool(isTurnRight ? "Turn Right" : "Turn Left", true);
             _playerAnimator.SetBool(!isTurnRight ? "Turn Right" : "Turn Left", false);
@@ -136,12 +139,12 @@ public class Locomotion : MonoBehaviour
         if (!isGrounded())
             return;
         _velocity.y += Mathf.Sqrt(JumpHeight * -1.0f * _gravityValue);
-        _playerAnimator.SetTrigger("Jump");
+        _playerAnimator.SetInteger("JumpStatus", 1);
     }
-    public bool isGrounded()
+    public bool isGrounded(float distance = 0.4f)
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.4f, ~IgnoreLayer/*CollisionLayer*/))
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, distance, ~IgnoreLayer/*CollisionLayer*/))
             return true;
         else
             return false;
@@ -160,6 +163,6 @@ public class Locomotion : MonoBehaviour
     public void Fly(float height)
     {
         _velocity.y += Mathf.Sqrt(height * -1.0f * _gravityValue);
-        _playerAnimator.SetTrigger("Jump");
+        _playerAnimator.SetInteger("JumpStatus", 1);
     }
 }
