@@ -16,7 +16,7 @@ public class Polar : MonoBehaviour
     [Range(10f, 50f)]
     public float MagnetForce = 35f;
     private Rigidbody _rb;
-    private List<Polar> _affectedObject = new List<Polar>();
+    public List<Polar> _affectedObject = new List<Polar>();
     private void OnEnable()
     {
         if (this.transform.parent.GetComponent<Rigidbody>() == null)
@@ -36,6 +36,7 @@ public class Polar : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.name);
         if (other.GetComponent<Polar>() == null)
             return;
         else

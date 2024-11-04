@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Burn : MonoBehaviour
 {
-    private float _burnTime = 3f;
+    public float BurnTime = 3f;
 
     private void Awake()
     {
-        _burnTime = Random.Range(3f, 5f);
+        BurnTime += Random.Range(0.5f, 1f);
         StartCoroutine(Burning());
     }
     public void OnParticleCollision(GameObject other)
@@ -19,12 +19,28 @@ public class Burn : MonoBehaviour
         {
             transform.localScale -= Vector3.one * 0.1f;
             if (transform.localScale.x < 0.2f)
+            {
+                StopAllCoroutines();
                 Destroy(gameObject);
+            }
         }
     }
     private IEnumerator Burning()
     {
-       yield return new WaitForSeconds(_burnTime);
-       Destroy(gameObject);
+        // burn sound
+        float burnSoundTime = 0.75f;
+        yield return new WaitForSeconds(BurnTime - burnSoundTime);
+        if(GetComponent<AudioSource>() != null)
+        {
+            AudioSource audio = GetComponent<AudioSource>();
+            for(float f = 0f; f< burnSoundTime; f += Time.deltaTime)
+            {
+                audio.volume = Mathf.Lerp(1f, 0f, f / burnSoundTime);
+                yield return null;
+            }
+        }
+        else
+            yield return new WaitForSeconds(burnSoundTime);
+        Destroy(gameObject);
     }
 }

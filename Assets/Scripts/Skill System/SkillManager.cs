@@ -32,12 +32,15 @@ public class SkillManager : MonoBehaviour
     private Material _capeMaterial;
     private Material _stickMaterial;
 
+    public AudioSource CastSound;
+    public AudioSource CastMovement;
 
     private void Awake()
     {
-        InputAction.actions["Interact"].performed += ctx => ActivateSkill();
         _capeMaterial = Cape.sharedMaterial;
         _stickMaterial = Stick.material;
+        InputAction.actions["Interact"].performed += ctx => ActivateSkill();
+        InputAction.actions["Skill Map"].performed += ctx => { CastSound.volume = 0.5f;  CastSound.time = 0; CastSound.Play(); };
     }
     private void Update()
     {
@@ -49,6 +52,9 @@ public class SkillManager : MonoBehaviour
     private string[] _cursableState = new string[] { "Idle", "Turn Left", "Turn Right", "VictoryStart", "VictoryMaintain" };
     public void Pending()
     {
+
+        if (_fadeCoroutine != null)
+            return;
         bool isCursable = false;
         foreach(string state in _cursableState)
         {
@@ -68,8 +74,6 @@ public class SkillManager : MonoBehaviour
         PlayerAnimator.SetBool("Casting", true);
         if (_currentTime > Threshold)
             StartCoroutine(ChangeSkill());
-        if (_fadeCoroutine != null)
-            StopCoroutine(_fadeCoroutine);
     }
     public IEnumerator ChangeSkill()
     {
@@ -97,8 +101,8 @@ public class SkillManager : MonoBehaviour
         if (!isCursable)
             return;
         PlayerAnimator.SetTrigger("Use Skill");
+        CastMovement.Play();
         PlayerAnimator.SetInteger("Skill Attack", _currentSkillIndex);
-        
         IEnumerator coroutine = UseSkill(_currentSkillIndex);
         StartCoroutine(coroutine);
     }
@@ -117,9 +121,19 @@ public class SkillManager : MonoBehaviour
     }
     public IEnumerator FadeOutEffect()
     {
-        yield return new WaitForSeconds(0.5f);
-        MagicRing.SetActive(false);
+        Material ringMaterial = MagicRing.GetComponent<ParticleSystemRenderer>().material;
+        Color color = ringMaterial.GetColor("_TintColor");
+        for (float f= 0f; f<=0.5f; f += Time.deltaTime)
+        {
+            CastSound.volume = Mathf.Lerp(0.5f, 0f, f / 0.5f);
+            ringMaterial.SetColor("_TintColor", new Color(color.r, color.g, color.b, Mathf.Lerp(color.a, 0, f/0.5f)));
+            yield return null;
+        }
+        CastSound.Pause();
         yield return new WaitForSeconds(1.0f);
+        MagicRing.SetActive(false);
+        ringMaterial.SetColor("_TintColor", color);
+
         MagicFog.SetActive(false);
         _fadeCoroutine = null;
     }
