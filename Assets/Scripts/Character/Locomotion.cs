@@ -77,7 +77,7 @@ public class Locomotion : MonoBehaviour
         {
             _playerAnimator.SetFloat("Move Y", -1f);
         }
-        else if (dir.y > 0 && _characterController.isGrounded)
+        else if (dir.y > 0 && isGrounded())
         {
             _moveYDuration += Time.deltaTime;
             if (_moveYDuration > 2f)
@@ -110,7 +110,7 @@ public class Locomotion : MonoBehaviour
         MainCamera.transform.position = transform.position + distance * (Quaternion.Euler(m_Rotation.x, 0f, 0f) * Vector3.up);
         MainCamera.transform.RotateAround(transform.position, Vector3.up, m_Rotation.y);
         MainCamera.transform.LookAt(TargetPosition.position + new Vector3(0, 1f, 0f));
-
+        TargetPosition.forward = MainCamera.transform.forward;
         //m_Rotation.x = Mathf.Clamp(m_Rotation.x - rotate.y * scaledRotateSpeed, -89, 89);
         transform.localEulerAngles = new Vector3(0f, m_Rotation.y + 180, 0f);
 
@@ -160,6 +160,12 @@ public class Locomotion : MonoBehaviour
             return _moveYDuration > 2f;
         }
     }
+    public bool isMoving
+    {
+        get { return _playerAnimator.GetBool("is Moving"); }
+    }
+
+
     public void Fly(float height)
     {
         _velocity.y += Mathf.Sqrt(height * -1.0f * _gravityValue);

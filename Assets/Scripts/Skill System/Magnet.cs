@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Magnet : Skill
 {
-    public GameObject Target;
     public Polar SouthPolar;
 
     public void OnEnable()

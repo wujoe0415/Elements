@@ -17,10 +17,10 @@ TagManager:
   - Obstacle
   - 
   - 
+  - Floor
   - 
-  - 
-  - 
-  - 
+  - Interactable
+  - Outline
   - 
   - 
   - 
