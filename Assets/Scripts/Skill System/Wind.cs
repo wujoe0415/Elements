@@ -9,7 +9,7 @@ public class Wind : Skill
 
     public override void Activate()
     {
-        Instantiate(WindField, TargetPosition.position, Quaternion.identity);
+        Instantiate(WindField, HintManager.Instance.HintCircle.position, Quaternion.identity);
     }
 
     public override void Deactivate()

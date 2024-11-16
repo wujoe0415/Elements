@@ -18,3 +18,4 @@ public class Floor : MonoBehaviour
             WalkSoundManager.Instance?.ChangeFloor(FloorType.Default);
     }
 }
+

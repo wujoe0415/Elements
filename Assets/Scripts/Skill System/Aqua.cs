@@ -8,7 +8,7 @@ public class Aqua : Skill
     public GameObject Rain;
     public override void Activate()
     {
-       Instantiate(Rain, Anchor.position, Quaternion.identity);
+       Instantiate(Rain, HintManager.Instance.HintCircle.position + Vector3.up * 3f, Quaternion.identity);
     }
     public override void Deactivate()
     {

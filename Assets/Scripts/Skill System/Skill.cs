@@ -10,6 +10,8 @@ public interface ISkill
 
 public class Skill : MonoBehaviour, ISkill
 {
+    public string Name = "None";
+    public GameObject Target;
     public virtual void Activate()
     {
         Debug.Log("Skill activated");
@@ -17,5 +19,9 @@ public class Skill : MonoBehaviour, ISkill
     public virtual void Deactivate()
     {
         Debug.Log("Skill deactivated");
+    }
+    public void SetTarget(GameObject t)
+    {
+        Target = t;
     }
 }
