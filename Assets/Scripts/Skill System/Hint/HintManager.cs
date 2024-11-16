@@ -76,7 +76,6 @@ public class HintManager : MonoBehaviour
     }
     public void ClearTarget()
     {
-        Debug.Log("Target");
         ClearOutline(TargetObject);
         TargetObject = null;
     }
