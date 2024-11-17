@@ -30,7 +30,11 @@ public class PlayerStatusManager : MonoBehaviour
             respawnCamera.enabled = false;
         }
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.G))
+            Die();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Death"))
@@ -92,12 +96,13 @@ public class PlayerStatusManager : MonoBehaviour
             mainCamera.enabled = false;
             respawnCamera.enabled = true;
         }
-
+        Transform respawnParent = respawnCamera.transform.parent;
+        respawnCamera.transform.parent = null;
         // 等待運鏡結束
         yield return new WaitForSeconds(2.0f);
 
         RecordLoader.Instance.TriggerFlag(this.gameObject);
-
+        respawnCamera.transform.position = this.transform.position;
         if (playerAnimator != null)
         {
             playerAnimator.Play("Respawn"); // 播放從天而降的動畫
@@ -112,6 +117,7 @@ public class PlayerStatusManager : MonoBehaviour
             respawnCamera.enabled = false;
             mainCamera.enabled = true;
         }
+        respawnCamera.transform.parent = respawnParent;
         Debug.Log("玩家已復活！");
     }
 

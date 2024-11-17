@@ -1,12 +1,12 @@
 {
     "Status": {
         "Health": 100,
-        "UnlockSkillNum": 4
+        "UnlockSkillNum": 2
     },
     "RespawnPosition": {
         "x": 0.08876705169677735,
         "y": -0.030864596366882325,
-        "z": 54.35746765136719
+        "z": 9.297468185424805
     },
     "RespawnRotation": {
         "x": 0.0,
