@@ -1,11 +1,12 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Profiling;
 
+[RequireComponent(typeof(PlayerStatusRecord))]
 public class RecordLoader : MonoBehaviour
 {
     public static RecordLoader Instance { get; private set; }
-
-    private Vector3 respawnPoint; // 用來記錄當前的重生點
-    private Quaternion respawnRotation; // 用來記錄玩家的重生方向
+    public PlayerStatusRecord Recorder;
 
     private void Awake()
     {
@@ -16,12 +17,8 @@ public class RecordLoader : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject); // 保持單例在場景切換時不被銷毀
-
-        // 設置初始重生點為玩家的起始位置
-        respawnPoint = Vector3.zero;
-        respawnRotation = Quaternion.identity;
+        Recorder = GetComponent<PlayerStatusRecord>();
     }
-
     /// <summary>
     /// 更新當前的紀錄點
     /// </summary>
@@ -29,25 +26,50 @@ public class RecordLoader : MonoBehaviour
     /// <param name="newRotation">新的重生方向</param>
     public void UpdateFlag(Vector3 newPosition, Quaternion newRotation)
     {
-        respawnPoint = newPosition;
-        respawnRotation = newRotation;
-        Debug.Log($"紀錄點已更新至位置: {newPosition}, 方向: {newRotation}");
+        RecordData data = Recorder.LoadFromJson();
+        data.RespawnPosition = newPosition;
+        data.RespawnRotation = newRotation;
+        Recorder.SaveToJson(data);
     }
+    public void UpdatePlayerStatus()
+    {
 
+        RecordData data = Recorder.LoadFromJson();
+        data.Status = PlayerStatusManager.Instance.Status;
+        Debug.Log(PlayerStatusManager.Instance.Status);
+        Recorder.SaveToJson(data);
+    }
+    public void AddDeathNum()
+    {
+        RecordData data = Recorder.LoadFromJson();
+        data.DeathNum++;
+        Recorder.SaveToJson(data);
+    }
     /// <summary>
     /// 將玩家角色移動到紀錄點
     /// </summary>
     /// <param name="player">玩家角色的 GameObject</param>
     public void TriggerFlag(GameObject player)
     {
-        player.transform.position = respawnPoint;
-        player.transform.rotation = respawnRotation;
-        Debug.Log("玩家已重生至紀錄點。");
 
-        PlayerStatus playerStatus = player.GetComponent<PlayerStatus>();
+        PlayerStatusManager playerStatus = player.GetComponent<PlayerStatusManager>();
         if (playerStatus != null)
         {
-            playerStatus.LoadFromJson(); // 重生時恢復玩家狀態
+            RecordData status = Recorder.LoadFromJson();
+            if (status.Status != null)
+                playerStatus.SetPlayerStatus(status.Status); // 重生時恢復玩家狀態
+            else
+                Debug.LogError("PlayerStatus 讀取錯誤！");
+
+            Debug.Log(status.RespawnPosition);
+
+            player.GetComponent<CharacterController>().enabled = false;
+            player.transform.position = status.RespawnPosition;
+            player.transform.rotation = status.RespawnRotation;
+            player.GetComponent<CharacterController>().enabled = true;
+            Debug.Log("玩家已重生至紀錄點。");
         }
     }
 }
+
+    

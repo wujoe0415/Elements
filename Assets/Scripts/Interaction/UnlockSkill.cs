@@ -10,10 +10,10 @@ public class UnlockSkill : MonoBehaviour
         // 當玩家在範圍內且按下 E 鍵時，觸發解鎖技能
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            PlayerStatus playerStatus = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStatus>();
+            PlayerStatusManager playerStatus = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStatusManager>();
             if (playerStatus != null)
             {
-                UnlockPlayerSkill(playerStatus);
+                UnlockPlayerSkill();
             }
         }
     }
@@ -21,14 +21,12 @@ public class UnlockSkill : MonoBehaviour
     /// <summary>
     /// 將玩家的技能數量增加一個，若未達到技能上限。
     /// </summary>
-    private void UnlockPlayerSkill(PlayerStatus playerStatus)
+    private void UnlockPlayerSkill()
     {
-        if (playerStatus.unlockedSkills < 5) // 技能上限為 5
+        if (PlayerStatusManager.Instance.Status.UnlockSkillNum < 5) // 技能上限為 5
         {
-            playerStatus.unlockedSkills++;
-            Debug.Log($"技能已解鎖！當前解鎖的技能數量: {playerStatus.unlockedSkills}");
-            playerStatus.SaveToJson(); // 保存玩家狀態更新至 JSON 檔案
-
+            PlayerStatusManager.Instance.Status.UnlockSkillNum++;
+            RecordLoader.Instance.UpdatePlayerStatus();
             // 可以加入其他效果，例如播放解鎖動畫、音效等
 
             Destroy(gameObject); // 解鎖後摧毀該物件，防止重複解鎖

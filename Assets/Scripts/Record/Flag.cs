@@ -13,11 +13,6 @@ public class Flag : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             RecordLoader.Instance.UpdateFlag(transform.position, transform.rotation);
-            PlayerStatus playerStatus = other.GetComponent<PlayerStatus>();
-            if (playerStatus != null)
-            {
-                playerStatus.SaveToJson(); // 保存玩家狀態到 JSON
-            }
             isActivated = true;
             Debug.Log("玩家經過旗幟，紀錄點和狀態已更新。");
         }
