@@ -16,6 +16,7 @@ public class PlayerStatusManager : MonoBehaviour
     [SerializeField] private GameObject deathEffectPrefab; // 粒子特效預製體
     [SerializeField] private Camera mainCamera; // 主相機
     [SerializeField] private PlayableDirector respawnCamera; // 復活相機
+    public GameObject DieCamera;
     [SerializeField] private Animator playerAnimator; // 玩家動畫控制器
 
     private void Awake()
@@ -99,7 +100,9 @@ public class PlayerStatusManager : MonoBehaviour
         Transform respawnParent = respawnCamera.transform.parent;
         //respawnCamera.transform.parent = null;
         // 等待運鏡結束
+        DieCamera.SetActive(true);
         yield return new WaitForSeconds(2.0f);
+        DieCamera.SetActive(false);
 
         RecordLoader.Instance.TriggerFlag(this.gameObject);
         respawnCamera.transform.position = this.transform.position;
