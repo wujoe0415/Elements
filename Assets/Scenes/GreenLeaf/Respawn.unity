@@ -1789,6 +1789,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7539522403796415603, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2133,6 +2137,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7539522403796415600, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7539522403796415603, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
+      propertyPath: prewarm
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2905,6 +2913,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7539522403796415603, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
+      propertyPath: prewarm
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7539522403796415603, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7539522403796415603, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3045,6 +3065,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7539522403796415600, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7539522403796415603, guid: 9a449243218d294419a41ed7272c87dc, type: 3}
+      propertyPath: prewarm
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

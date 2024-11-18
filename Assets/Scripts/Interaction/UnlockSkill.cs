@@ -25,7 +25,7 @@ public class UnlockSkill : MonoBehaviour
     {
         if (PlayerStatusManager.Instance.Status.UnlockSkillNum < 5) // 技能上限為 5
         {
-            PlayerStatusManager.Instance.Status.UnlockSkillNum++;
+            PlayerStatusManager.Instance.UnlockSkill();
             RecordLoader.Instance.UpdatePlayerStatus();
             // 可以加入其他效果，例如播放解鎖動畫、音效等
 

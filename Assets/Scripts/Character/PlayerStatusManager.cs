@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Playables;
+using UnityEditorInternal;
 
 [System.Serializable]
 public class PlayerStatus {
@@ -123,6 +124,11 @@ public class PlayerStatusManager : MonoBehaviour
         }
         respawnCamera.transform.parent = respawnParent;
         Debug.Log("ª±®a¤w´_¬¡¡I");
+    }
+    public void UnlockSkill()
+    {
+        Status.UnlockSkillNum++;
+
     }
 
     public void SetPlayerStatus(PlayerStatus status) {

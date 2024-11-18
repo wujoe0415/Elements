@@ -101,7 +101,7 @@ public class SkillManager : MonoBehaviour
         PlayerAnimator.SetBool("Casting", true);
         // Sound Problem
         
-        if (_currentTime > Threshold && _changeSkillCoroutine == null)
+        if (_currentTime > Threshold && _changeSkillCoroutine == null && PlayerStatusManager.Instance.Status.UnlockSkillNum != 1)
         {
             _changeSkillCoroutine = ChangeSkill();
             StartCoroutine(_changeSkillCoroutine);
@@ -115,7 +115,7 @@ public class SkillManager : MonoBehaviour
         LevelingSound.volume = 0.5f; 
         LevelingSound.Play();
         yield return new WaitForSeconds(0.5f);
-        _currentSkillIndex = (_currentSkillIndex + 1) % Skills.Count;
+        _currentSkillIndex = (_currentSkillIndex + 1) % PlayerStatusManager.Instance.Status.UnlockSkillNum;//Skills.Count;
         _capeMaterial.SetColor("Color_c18aea2e3ad54319abb53f299507b005", Skills[_currentSkillIndex].Color);
         _stickMaterial.SetColor("_BaseColor", Skills[_currentSkillIndex].Color);
         yield return new WaitForSeconds(2f);
