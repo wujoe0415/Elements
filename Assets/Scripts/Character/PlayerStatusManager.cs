@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.IO; // 用於檔案操作
 using System.Collections;
+using UnityEngine.Playables;
 
 [System.Serializable]
 public class PlayerStatus {
@@ -15,7 +15,7 @@ public class PlayerStatusManager : MonoBehaviour
 
     [SerializeField] private GameObject deathEffectPrefab; // 粒子特效預製體
     [SerializeField] private Camera mainCamera; // 主相機
-    [SerializeField] private Camera respawnCamera; // 復活相機
+    [SerializeField] private PlayableDirector respawnCamera; // 復活相機
     [SerializeField] private Animator playerAnimator; // 玩家動畫控制器
 
     private void Awake()
@@ -25,10 +25,10 @@ public class PlayerStatusManager : MonoBehaviour
         else
             Instance = this;
         // 確保復活相機初始為禁用狀態
-        if (respawnCamera != null)
-        {
-            respawnCamera.enabled = false;
-        }
+        //if (respawnCamera != null)
+        //{
+        //    respawnCamera.gameObject.SetActive(false);
+        //}   
     }
     private void Update()
     {
@@ -76,7 +76,7 @@ public class PlayerStatusManager : MonoBehaviour
     {
         if (playerAnimator != null)
         {
-            playerAnimator.Play("Die"); // 播放從天而降的動畫
+            playerAnimator.SetTrigger("Die"); // 播放從天而降的動畫
         }
         if (deathEffectPrefab != null)
         {
@@ -93,11 +93,11 @@ public class PlayerStatusManager : MonoBehaviour
         // 切換到復活相機
         if (respawnCamera != null && mainCamera != null)
         {
-            mainCamera.enabled = false;
-            respawnCamera.enabled = true;
+            //mainCamera.enabled = false;
+            respawnCamera.gameObject.SetActive(true);
         }
         Transform respawnParent = respawnCamera.transform.parent;
-        respawnCamera.transform.parent = null;
+        //respawnCamera.transform.parent = null;
         // 等待運鏡結束
         yield return new WaitForSeconds(2.0f);
 
@@ -105,16 +105,17 @@ public class PlayerStatusManager : MonoBehaviour
         respawnCamera.transform.position = this.transform.position;
         if (playerAnimator != null)
         {
-            playerAnimator.Play("Respawn"); // 播放從天而降的動畫
+            playerAnimator.SetTrigger("Respawn"); // 播放從天而降的動畫
         }
+        respawnCamera.Play();
 
         // 等待動畫完成
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(4.0f);
 
         // 切回主相機
         if (respawnCamera != null && mainCamera != null)
         {
-            respawnCamera.enabled = false;
+            respawnCamera.gameObject.SetActive(false);
             mainCamera.enabled = true;
         }
         respawnCamera.transform.parent = respawnParent;
