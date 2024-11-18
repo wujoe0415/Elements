@@ -127,5 +127,6 @@ public class PlayerStatusManager : MonoBehaviour
 
     public void SetPlayerStatus(PlayerStatus status) {
         Status = status;
+
     }
 }
