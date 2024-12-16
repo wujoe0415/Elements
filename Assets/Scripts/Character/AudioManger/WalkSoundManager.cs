@@ -56,6 +56,8 @@ public class WalkSoundManager : MonoBehaviour
             if(fs.Floor == floor)
             {
                 _currentfloor = fs;
+                PlayerLocomotion.Speed = fs.WalkSpeed;
+                PlayerLocomotion.RunSpeed = fs.RunSpeed;
                 break;
             }
         }
