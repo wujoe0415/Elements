@@ -4627,6 +4627,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Character
       objectReference: {fileID: 0}
+    - target: {fileID: 3425700724517184979, guid: 24b4cbe3a0dc2a44698fda951c374cf0, type: 3}
+      propertyPath: Status.UnlockSkillNum
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3764805366961918066, guid: 24b4cbe3a0dc2a44698fda951c374cf0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
