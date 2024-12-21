@@ -11,4 +11,12 @@ public class Interactable : MonoBehaviour
             return true;
         }
     }
+    public void Awake()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Interactable");
+    }
+    public virtual void Interact()
+    {
+        Debug.Log("Interacting with " + gameObject.name);
+    }
 }
