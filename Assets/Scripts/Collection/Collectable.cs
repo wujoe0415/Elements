@@ -10,5 +10,10 @@ public class Collectable : Interactable
         if(!string.IsNullOrEmpty(SingleKeyword) && CollectionBag.Instance.ContainsCollection(SingleKeyword))
             return;
         CollectionBag.Instance.AddCollection(this.gameObject);
+
+        PutCollection collectionShelves = transform.parent.GetComponent<PutCollection>();
+        if (collectionShelves == null)
+            return;
+        collectionShelves.Collections.Find(x => x.collection == this.gameObject).isCollected = true;
     }
 }

@@ -25,8 +25,10 @@ public class Mixer : Interactable
     public MeshRenderer Mix1Result;
      
     public List<MixFormula> MixFormulas = new List<MixFormula>();
-
+    
     public Material PotionNone;
+
+    private AudioSource _audioSource;
 
     public override void Interact()
     {
@@ -48,7 +50,7 @@ public class Mixer : Interactable
             Mix1 = "";
             Mix2 = "";
         }
-        else
+        else if (!mix.name.Contains("none"))
         {
             Mix1 = mix.name;
             SetLiquidColor(Mix1Result, mix.name.Substring(7));
@@ -66,6 +68,7 @@ public class Mixer : Interactable
         meshRenderer.materials = materials;
 
         CollectionBag.Instance.TakeOutCollection(mix);
+        _audioSource.Play();
     }
 
     public void Mix(string mix1, string mix2)
@@ -82,7 +85,6 @@ public class Mixer : Interactable
         if (string.IsNullOrEmpty(result))
         {
             Debug.Log($"No formula found for mixing {mix1Name} and {mix2Name}");
-            return;
         }
 
         // Handle the result
@@ -101,7 +103,7 @@ public class Mixer : Interactable
                 return formula.result;
             }
         }
-        return "";
+        return "black";
     }
 
     private void HandleMixResult(string result)
@@ -138,7 +140,10 @@ public class Mixer : Interactable
         Material liquidMaterial = liquid.material;
         Color color = GetPotionColor(potionName);
         liquidMaterial.color = color;
-        liquidMaterial.EnableKeyword("_EMISSION");
+        if(color.a != 0f)
+            liquidMaterial.EnableKeyword("_EMISSION");
+        else
+            liquidMaterial.DisableKeyword("_EMISSION");
         liquidMaterial.SetColor("_EmissionColor", color);
         liquid.material = liquidMaterial;
     }
@@ -158,8 +163,10 @@ public class Mixer : Interactable
                 return new Color(1f, 0.4f, 0.7f, 0.8f); // Pink
             case "purple":
                 return new Color(0.5f, 0f, 0.5f, 0.8f); // Purple
+            case "black":
+                return new Color(0f, 0f, 0f, 1f);   // Black
             default:
-                return new Color(0f, 0f, 0f, 1f);   // Default white
+                return new Color(0f, 0f, 0f, 0f);   // Default white
         }
     }
 
@@ -184,6 +191,7 @@ public class Mixer : Interactable
     // Optional: Initialize formulas when the component starts
     private void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
         InitializeFormulas();
         MixResult.SetActive(false);
     }

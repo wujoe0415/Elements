@@ -1,46 +1,79 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Burn : MonoBehaviour
 {
     public float BurnTime = 3f;
+    private ParticleSystem fireParticle;
+    private float originalStartSize;
+    private bool isShrinking = false;
 
     private void Awake()
     {
         BurnTime += Random.Range(0.5f, 1f);
+        fireParticle = GetComponent<ParticleSystem>();
+        if (fireParticle != null)
+        {
+            var main = fireParticle.main;
+            originalStartSize = main.startSize.constant;
+        }
         StartCoroutine(Burning());
     }
+
     public void OnParticleCollision(GameObject other)
     {
-        Debug.Log(other.name);
-        if (other.name == "FX_Rain_Collision_01")
+        if (other.name == "FX_Rain_Collision_01" && !isShrinking && fireParticle != null)
         {
-            transform.localScale -= Vector3.one * 0.1f;
-            if (transform.localScale.x < 0.2f)
+            var main = fireParticle.main;
+            float currentSize = main.startSize.constant;
+            float newSize = currentSize - 0.1f;
+
+            // 如果粒子尺寸小於原始尺寸的20%
+            if (newSize < originalStartSize * 0.2f)
             {
-                StopAllCoroutines();
-                Destroy(gameObject);
+                isShrinking = true;
+                main.loop = false; // 停止循環
+                StartCoroutine(DestroyAfterParticles());
+            }
+            else
+            {
+                main.startSize = newSize;
             }
         }
     }
+
+    private IEnumerator DestroyAfterParticles()
+    {
+        // 等待粒子系統完全停止
+        yield return new WaitForSeconds(fireParticle.main.duration);
+        StopAllCoroutines();
+        Destroy(gameObject);
+    }
+
     private IEnumerator Burning()
     {
         // burn sound
         float burnSoundTime = 0.75f;
         yield return new WaitForSeconds(BurnTime - burnSoundTime);
-        if(GetComponent<AudioSource>() != null)
+
+        if (GetComponent<AudioSource>() != null)
         {
             AudioSource audio = GetComponent<AudioSource>();
-            for(float f = 0f; f< burnSoundTime; f += Time.deltaTime)
+            for (float f = 0f; f < burnSoundTime; f += Time.deltaTime)
             {
                 audio.volume = Mathf.Lerp(1f, 0f, f / burnSoundTime);
                 yield return null;
             }
         }
         else
+        {
             yield return new WaitForSeconds(burnSoundTime);
-        Destroy(gameObject);
+        }
+
+        if (!isShrinking) // 只有在還沒開始縮小時才執行
+        {
+            Destroy(gameObject);
+        }
     }
 }

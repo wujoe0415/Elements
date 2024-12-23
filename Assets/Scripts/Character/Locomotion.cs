@@ -1,11 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Scripting.APIUpdating;
 
 [RequireComponent(typeof(CharacterController), typeof(PlayerInput), typeof(Animator))]
 public class Locomotion : MonoBehaviour
@@ -170,5 +165,14 @@ public class Locomotion : MonoBehaviour
     {
         _velocity.y += Mathf.Sqrt(height * -1.0f * _gravityValue);
         _playerAnimator.SetInteger("JumpStatus", 1);
+    }
+
+    public void FreezeInput()
+    {
+        _inputAction.enabled = false;
+    }
+    public void EnableInput()
+    {
+        _inputAction.enabled = true;
     }
 }

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Playables;
-using UnityEditorInternal;
 
 [System.Serializable]
 public class PlayerStatus {
@@ -66,6 +65,7 @@ public class PlayerStatusManager : MonoBehaviour
     private void Die()
     {
         Debug.Log("玩家死亡，準備重生。");
+        GetComponent<Locomotion>().FreezeInput();
         RecordLoader.Instance.AddDeathNum();
         TriggerDeathEffect(); // 觸發粒子特效
         StartCoroutine(HandleRespawn()); // 啟動復活流程
@@ -124,6 +124,7 @@ public class PlayerStatusManager : MonoBehaviour
         }
         respawnCamera.transform.parent = respawnParent;
         Debug.Log("玩家已復活！");
+        GetComponent<Locomotion>().EnableInput();
     }
     public void UnlockSkill()
     {

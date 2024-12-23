@@ -2,26 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Potion : Collectable
+public class FillPotion : DialogueObject
 {
+    public string Color = "red";
+
+    public List<string> AfterFilled = new List<string>();
+    private AudioSource _audioSource;
+
+    public void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
     public override void Interact()
     {
-        GameObject mixGameObject = CollectionBag.Instance.ContainsCollection("Mix");
-        if(gameObject.name.Contains("none") && mixGameObject != null)
+        if (CollectionBag.Instance.ContainsCollection("Potion"))
         {
-            Material[] m = GetComponent<MeshRenderer>().materials;
-            Debug.Log(mixGameObject.gameObject.name.Substring(10));
-            Color color = GetPotionColor(mixGameObject.gameObject.name.Substring(10));
-            
+            Debug.Log("Fill potion");
+            Debug.Log(CollectionBag.Instance.ContainsCollection("Potion").name);
+            CollectionBag.Instance.ContainsCollection("Potion").name = $"Potion_{Color}";
+            Debug.Log(CollectionBag.Instance.ContainsCollection("Potion").name);
+            GameObject potion = CollectionBag.Instance.ContainsCollection("Potion");
+            Material[] m = potion.GetComponent<MeshRenderer>().materials;
+            //Debug.Log(mixGameObject.gameObject.name.Substring(10));
+            Color color = GetPotionColor(Color);
+
             m[m.Length - 1].color = color;
             m[m.Length - 1].EnableKeyword("_EMISSION");
             m[m.Length - 1].SetColor("_EmissionColor", color);
 
-            GetComponent<MeshRenderer>().materials = m;
-            CollectionBag.Instance.TakeOutCollection(mixGameObject.gameObject);
-            FindObjectOfType<Mixer>()?.SwitchToNormal();
+            potion.GetComponent<MeshRenderer>().materials = m;
 
-
+            DialogueSystem.Instance.SetDiagues(AfterFilled);
+            DialogueSystem.Instance.StartDialogue();
+            _audioSource.Play();
         }
         else
             base.Interact();

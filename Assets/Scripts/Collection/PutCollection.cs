@@ -9,6 +9,7 @@ public class PutCollection : Interactable
     {
         public GameObject collection;
         public Vector3 position;
+        public bool isCollected = false;
     }
     public List<CollectionSlot> Collections = new List<CollectionSlot>();
     public bool isRandom = false;
@@ -23,6 +24,7 @@ public class PutCollection : Interactable
             
             slot.collection = transform.gameObject;
             slot.position = transform.position;
+            slot.isCollected = false;
             Collections.Add(slot);
         }
     }
@@ -33,17 +35,18 @@ public class PutCollection : Interactable
     }
     public void PutCollections()
     {
-        List<CollectionSlot> tempCollections = new List<CollectionSlot>(Collections);
+        List<CollectionSlot> tempCollections = new List<CollectionSlot>();
         foreach(CollectionSlot slot in Collections)
         {
-            if (slot.collection == null)
+            if (slot.isCollected)
                 tempCollections.Add(slot);
         }
+        Debug.Log(tempCollections.Count);
         if (tempCollections.Count == 0)
             return;
         CollectionSlot finalSlot = tempCollections[(isRandom ? Random.Range(0, tempCollections.Count) : 0)];
         
         CollectionBag.Instance.TakeOutCollection(finalSlot.collection);
-        finalSlot.collection.transform.parent = transform;
+        finalSlot.isCollected = false;
     }
 }

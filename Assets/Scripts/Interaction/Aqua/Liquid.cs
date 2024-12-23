@@ -11,7 +11,7 @@ public class Liquid : MonoBehaviour
         if (other.name == "FX_Rain_Collision_01")
         {
             if (Surface.position.y < MaxHeight)
-                Surface.position += Vector3.up * 0.00035f;
+                Surface.position += Vector3.up * 0.0007f;
         }
     }
 }
