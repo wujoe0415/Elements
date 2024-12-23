@@ -23061,10 +23061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DialogueUI: {fileID: 766524993}
   text: {fileID: 690191282}
-  Dialogues:
-  - "\u3128"
-  - "\u311B"
-  - "\u3119\u02CB"
+  Dialogues: []
   typingSpeed: 0.08
   dialogueInterval: 1
   fadeOutDuration: 0.5
@@ -46348,7 +46345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4164831158362650, guid: 41cbce41e6100bd4795fcf7202869c8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.62
+      value: -6.73
       objectReference: {fileID: 0}
     - target: {fileID: 4164831158362650, guid: 41cbce41e6100bd4795fcf7202869c8e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -46356,7 +46353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4164831158362650, guid: 41cbce41e6100bd4795fcf7202869c8e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -39.34
+      value: -38.317
       objectReference: {fileID: 0}
     - target: {fileID: 4164831158362650, guid: 41cbce41e6100bd4795fcf7202869c8e, type: 3}
       propertyPath: m_LocalRotation.w
