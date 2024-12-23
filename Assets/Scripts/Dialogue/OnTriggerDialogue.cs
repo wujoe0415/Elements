@@ -16,6 +16,7 @@ public class OnTriggerDialogue : MonoBehaviour
     public void OnTrigger()
     {
         Debug.Log("trigger");
+        DialogueSystem.Instance.EndDialogue();
         DialogueSystem.Instance.SetDiagues(Dialogues);
         DialogueSystem.Instance.StartDialogue();
     }
