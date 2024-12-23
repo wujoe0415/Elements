@@ -1,7 +1,7 @@
 {
     "Status": {
         "Health": 100,
-        "UnlockSkillNum": 1
+        "UnlockSkillNum": 3
     },
     "RespawnPosition": {
         "x": -0.5699999928474426,
@@ -14,5 +14,5 @@
         "z": 0.0,
         "w": 0.9238795638084412
     },
-    "DeathNum": 119
+    "DeathNum": 137
 }
