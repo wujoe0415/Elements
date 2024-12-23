@@ -4928,7 +4928,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76b112341ae54c74ab5120c94710c07a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WindForce: 25
+  WindForce: 28
   Duration: 5
   Audio: {fileID: 2477530130861323939}
 --- !u!65 &158025428616972763
